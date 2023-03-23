@@ -10,13 +10,11 @@ public class App {
 
         Scanner menu = new Scanner(System.in);
         ReadFile fr = new ReadFile();
-
-        String city_name = "";
         Map<Integer, String> dest = new HashMap<Integer, String>();
-
         List<Route> routes = new LinkedList<Route>();
         Destination destinations = new Destination(dest);
-        fr.readFile("DNIT-Distancias.csv", routes, destinations);
+        String file = "DNIT-Distancias.csv";
+        fr.readFile(file, routes, destinations);
 
         // for (Map.Entry<Integer, String> entry : destinations.getDest().entrySet()) {
         // System.out.println(entry.getKey() + " " + entry.getValue());
@@ -43,6 +41,7 @@ public class App {
 
                 case 1:
                     System.exit(0);
+                    menu.close();
 
                     break;
 
