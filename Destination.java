@@ -14,8 +14,8 @@ public class Destination {
         return dest;
     }
 
-    public void setDest(Map<Integer, String> dest) {
-        this.dest = dest;
+    public void setDest(Map<Integer, String> dest, int id, String name) {
+        dest.put(id, name);
     }
 
 }
