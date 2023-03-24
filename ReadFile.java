@@ -4,13 +4,13 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ReadFile {
 
-    public void readFile(String file, List<Route> routes, Destination destinations) {
+    public void readFile(String file, Map<String,Map<String,Integer>> routes) {
 
         Path path = Paths.get(file);
 
@@ -18,24 +18,28 @@ public class ReadFile {
             String line = reader.readLine();
             String[] aux = line.split(";");
             int id = 0;
+            Map<Integer,String> dest = new HashMap<Integer,String>();
             for (String s : aux) {
-                destinations.setDest(destinations.getDest(), id, s);
+                dest.put(id, s);
                 id++;
             }
             int depId = 0;
             int arrId = 0;
 
-            Route auxRoute = new Route("", 0, 0);
+           
             while ((line = reader.readLine()) != null) {
 
                 aux = line.split(";");
 
+                Map <String, Integer> auxMap = new HashMap<String, Integer>();
                 arrId = 0;
                 for (String s : aux) {
-                    auxRoute = new Route(destinations.getDest().get(depId), arrId, Integer.parseInt(s));
+                    auxMap.put(dest.get(arrId), Integer.parseInt(s));
+                    //System.out.println(destinations.getDest().get(depId) + " " + destinations.getDest().get(arrId) + " " + s);
                     arrId++;
-                    routes.add(auxRoute);
                 }
+                routes.put(dest.get(depId), auxMap);
+                //origins.add(auxOrigin);
                 depId++;
             }
 

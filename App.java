@@ -1,8 +1,7 @@
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.LinkedList;
+
 
 public class App {
 
@@ -10,11 +9,21 @@ public class App {
 
         Scanner menu = new Scanner(System.in);
         ReadFile fr = new ReadFile();
-        Map<Integer, String> dest = new HashMap<Integer, String>();
-        List<Route> routes = new LinkedList<Route>();
-        Destination destinations = new Destination(dest);
         String file = "DNIT-Distancias.csv";
-        fr.readFile(file, routes, destinations);
+        Map<String,Map<String,Integer>> routes = new HashMap<String,Map<String,Integer>>();
+        fr.readFile(file, routes);
+        //for (Origin origin : origins) {
+        //    System.out.println(origin.getName());
+        //    for (Map.Entry<String, Integer> entry : origin.getDest_distance().entrySet()) {
+        //        System.out.println(entry.getKey() + " " + entry.getValue());
+        //    }
+        //}
+        for (Map.Entry<String, Map<String, Integer>> entry : routes.entrySet()) {
+            System.out.println(entry.getKey());
+            for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
+                System.out.println(entry.getKey() + " " + entry2.getKey() + " " + entry2.getValue());
+            }
+        }
 
         // for (Map.Entry<Integer, String> entry : destinations.getDest().entrySet()) {
         // System.out.println(entry.getKey() + " " + entry.getValue());
@@ -31,9 +40,9 @@ public class App {
         while (true) {
             System.out.print("\n");
             System.out.print("|-----------------------------------------------|\n");
-            System.out.print("| Opção 1 - Sair                                |\n");
+            System.out.print("| Opcao 1 - Sair                                |\n");
             System.out.print("|-----------------------------------------------|\n");
-            System.out.print("Selecione uma opção: ");
+            System.out.print("Selecione uma opcao: ");
 
             int opt = menu.nextInt();
 
