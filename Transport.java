@@ -19,6 +19,12 @@ public class Transport {
     public List<Product> getProducts() {
         return products;
     }
+    public Map<String, Map<String, Integer>> getDeposit() {
+        return deposit;
+    }
+    public void setDeposit(Map<String, Map<String, Integer>> deposit) {
+        this.deposit = deposit;
+    }
     public void setProducts(List<Product> products) {
         this.products = products;
     }

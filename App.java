@@ -119,7 +119,8 @@ public class App {
                 }
                 if (!productNotFoundFlag) {
 
-                    System.out.println("Digite a quantidade de deposito (Quantidade Atual: " + currentProductQuantity(prodName, products) +"): ");
+                    System.out.println("Digite a quantidade de deposito (Quantidade Atual: "
+                            + currentProductQuantity(prodName, products) + "): ");
                     String depositQuantityString = kb.nextLine();
                     if (!tryInt(depositQuantityString)) {
                         System.out.print("Quantidade invalida, tente novamente.\n");
@@ -144,7 +145,8 @@ public class App {
 
         return deposit;
     }
-    private static boolean checkDepositLimit(String productName, int quantity, List<Product> products){
+
+    private static boolean checkDepositLimit(String productName, int quantity, List<Product> products) {
         for (Product p : products) {
             if (p.getName().equals(productName)) {
                 if (p.getQuantity() < quantity) {
@@ -155,7 +157,8 @@ public class App {
         return true;
 
     }
-    private static int currentProductQuantity(String productName, List<Product> products){
+
+    private static int currentProductQuantity(String productName, List<Product> products) {
         int quantity = 0;
         for (Product p : products) {
             if (p.getName().equalsIgnoreCase(productName)) {
@@ -263,24 +266,25 @@ public class App {
 
                 case "2":
                     List<String> cities = listCities(routes);
-                    //for (String city : cities) {
-                    //    System.out.println(city);
-                    //}
+                    // for (String city : cities) {
+                    // System.out.println(city);
+                    // }
                     List<Product> products = listProducts();
-                    //for (Product product : products) {
-                    //    System.out.println(product.getName());
-                    //    System.out.println(product.getWeight());
-                    //    System.out.println(product.getQuantity());
-                    //}
-                    Map<String,Map<String,Integer>> deposit = deposit(cities, products);
-                    //for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
-                    //    System.out.println(entry.getKey());
-                    //    for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
-                    //        System.out.println(entry.getKey() + " " + entry2.getKey() + " " + entry2.getValue());
-                    //    }
-                    //}
+                    // for (Product product : products) {
+                    // System.out.println(product.getName());
+                    // System.out.println(product.getWeight());
+                    // System.out.println(product.getQuantity());
+                    // }
+                    Map<String, Map<String, Integer>> deposit = deposit(cities, products);
+                    // for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
+                    // System.out.println(entry.getKey());
+                    // for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
+                    // System.out.println(entry.getKey() + " " + entry2.getKey() + " " +
+                    // entry2.getValue());
+                    // }
+                    // }
                     transports.add(new Transport(cities, products, deposit));
-                    //System.out.println("hi");
+                    // System.out.println("hi");
 
                     break;
 
