@@ -158,7 +158,7 @@ public class App {
     private static int currentProductQuantity(String productName, List<Product> products){
         int quantity = 0;
         for (Product p : products) {
-            if (p.getName().equals(productName)) {
+            if (p.getName().equalsIgnoreCase(productName)) {
                 quantity = p.getQuantity();
             }
         }
@@ -263,17 +263,23 @@ public class App {
 
                 case "2":
                     List<String> cities = listCities(routes);
-                    for (String city : cities) {
-                        System.out.println(city);
-                    }
+                    //for (String city : cities) {
+                    //    System.out.println(city);
+                    //}
                     List<Product> products = listProducts();
-                    for (Product product : products) {
-                        System.out.println(product.getName());
-                        System.out.println(product.getWeight());
-                        System.out.println(product.getQuantity());
-                    }
-                    deposit(cities, products);
-                    transports.add(new Transport(cities, products));
+                    //for (Product product : products) {
+                    //    System.out.println(product.getName());
+                    //    System.out.println(product.getWeight());
+                    //    System.out.println(product.getQuantity());
+                    //}
+                    Map<String,Map<String,Integer>> deposit = deposit(cities, products);
+                    //for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
+                    //    System.out.println(entry.getKey());
+                    //    for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
+                    //        System.out.println(entry.getKey() + " " + entry2.getKey() + " " + entry2.getValue());
+                    //    }
+                    //}
+                    transports.add(new Transport(cities, products, deposit));
                     //System.out.println("hi");
 
                     break;

@@ -1,11 +1,14 @@
 import java.util.List;
+import java.util.Map;
 
 public class Transport {
     private List<String> cities;//cidades que o transporte passa
     private List<Product> products;//produtos que o transporte transporta
-    public Transport(List<String> cities, List<Product> products) {
+    private Map<String,Map<String,Integer>> deposit;//depositos que o transporte faz em cada cidade
+    public Transport(List<String> cities, List<Product> products, Map<String,Map<String,Integer>> deposit) {
         this.cities = cities;
         this.products = products;
+        this.deposit = deposit;
     }
     public List<String> getCities() {
         return cities;
