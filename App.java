@@ -70,21 +70,22 @@ public class App {
                     System.out.print("2 - Medio Porte\n");
                     System.out.print("3 - Grande Porte\n");
                     int vehicle_type = menu.nextInt();
-                    
                     destination.toUpperCase();
+                    
                     String cost;
                     switch (vehicle_type) {
                         case 1:
                             cost = String.format("%.2f",(costs.get(1) * routes.get(origin).get(destination)));
-                            System.out.print("O custo do trecho é: R$" + cost);
+                            System.out.print("De " + origin + " para " + destination + " o custo do trecho é de: R$" + cost + " e a distancia é de: " + routes.get(origin).get(destination) + "km");
                             break;
                         case 2:
                             cost = String.format("%.2f",(costs.get(2) * routes.get(origin).get(destination)));
-                            System.out.print("O custo do trecho é: R$" + cost);
+                            System.out.print("De " + origin + " para " + destination + " o custo do trecho é: R$" + cost + " e a distancia é de: " + routes.get(origin).get(destination) + "km");
+
                             break;
                         case 3:
                             cost = String.format("%.2f",(costs.get(3) * routes.get(origin).get(destination)));
-                            System.out.print("O custo do trecho é: R$" + cost);
+                            System.out.print("De " + origin + " para " + destination + " o custo do trecho é: R$" + cost + " e a distancia é de: " + routes.get(origin).get(destination) + "km");
                             break;
                         default:
                             System.out.print("Opçao invalida");
