@@ -17,19 +17,19 @@ public class App {
             System.out.print("Digite o nome da cidade: ");
             String cityName = kb.nextLine();
             cityName = cityName.toUpperCase();
-            if (routes.containsKey(cityName)) {
-                cities.add(cityName);
-                if (cities.size() <= 1) {
-                    System.out.print("Cidade adicionada com sucesso, agora adicione mais uma cidade.\n");
-
-                } else {
-                    System.out.print("Deseja adicionar outra cidade? (S/N): ");
-                    option = kb.nextLine();
-                    option = option.toUpperCase();
-                }
-            } else {
+            if (!routes.containsKey(cityName)) {
                 System.out.print("Cidade nao encontrada na base de dados, tente novamente.\n");
+                continue;
             }
+            cities.add(cityName);
+            if (cities.size() <= 1) {
+                System.out.print("Cidade adicionada com sucesso, agora adicione mais uma cidade.\n");
+                continue;
+            }
+            System.out.print("Deseja adicionar outra cidade? (S/N): ");
+            option = kb.nextLine();
+            option = option.toUpperCase();
+
         }
         return cities;
     }
@@ -42,37 +42,37 @@ public class App {
             String prodName = kb.nextLine();
             if (prodName.length() <= 0) {
                 System.out.print("Nome invalido, tente novamente.\n");
-            } else {
-                System.out.println("Digite o peso do produto: ");
-                String prodWeightString = kb.nextLine();
-                if (!tryDouble(prodWeightString)) {
-                    System.out.print("Peso invalido, tente novamente.\n");
-                } else {
-                    double prodWeight = Double.parseDouble(prodWeightString);
-                    if (prodWeight <= 0) {
-                        System.out.print("Peso invalido, tente novamente.\n");
-                    } else {
-                        System.out.println("Digite o quantidade do produto: ");
-                        String prodQuantityString = kb.nextLine();
-                        if (!tryInt(prodQuantityString)) {
-                            System.out.print("Quantidade invalida, tente novamente.\n");
-                        } else {
-                            int prodQuantity = Integer.parseInt(prodQuantityString);
-                            if (prodQuantity <= 0) {
-                                System.out.print("Quantidade invalida, tente novamente.\n");
-                            } else {
-                                Product product = new Product(prodName, prodWeight, prodQuantity);
-                                products.add(product);
-                                System.out.print(
-                                        "Produto adicionado com sucesso. Deseja adicionar outro produto? (S/N): \n");
-                                option = kb.nextLine();
-                                option = option.toUpperCase();
-                            }
-                        }
-
-                    }
-                }
+                continue;
             }
+            System.out.println("Digite o peso do produto: ");
+            String prodWeightString = kb.nextLine();
+            if (!tryDouble(prodWeightString)) {
+                System.out.print("Peso invalido, tente novamente.\n");
+                continue;
+            }
+            double prodWeight = Double.parseDouble(prodWeightString);
+            if (prodWeight <= 0) {
+                System.out.print("Peso invalido, tente novamente.\n");
+                continue;
+            }
+            System.out.println("Digite o quantidade do produto: ");
+            String prodQuantityString = kb.nextLine();
+            if (!tryInt(prodQuantityString)) {
+                System.out.print("Quantidade invalida, tente novamente.\n");
+                continue;
+            }
+            int prodQuantity = Integer.parseInt(prodQuantityString);
+            if (prodQuantity <= 0) {
+                System.out.print("Quantidade invalida, tente novamente.\n");
+                continue;
+            }
+            Product product = new Product(prodName, prodWeight, prodQuantity);
+            products.add(product);
+            System.out.print(
+                    "Produto adicionado com sucesso. Deseja adicionar outro produto? (S/N): \n");
+            option = kb.nextLine();
+            option = option.toUpperCase();
+
         }
 
         return products;
@@ -102,45 +102,43 @@ public class App {
         System.out.println("Sera feito algum deposito em alguma cidade? (S/N): ");
         String option = kb.nextLine();
         option = option.toUpperCase();
-        boolean productNotFoundFlag = false;
+
         while (option.equals("S")) {
-            productNotFoundFlag = false;
+
             System.out.println("Digite o nome da cidade: ");
             String cityName = kb.nextLine();
             cityName = cityName.toUpperCase();
-            if (cities.contains(cityName)) {
-                System.out.println("Digite o nome do produto: ");
-                String prodName = kb.nextLine();
-                for (Product p : products) {
-                    if (!p.getName().equalsIgnoreCase(prodName)) {
-                        System.out.println("Produto nao encontrado, tente novamente.\n");
-                        productNotFoundFlag = true;
-                    }
-                }
-                if (!productNotFoundFlag) {
-
-                    System.out.println("Digite a quantidade de deposito (Quantidade Atual: "
-                            + currentProductQuantity(prodName, products) + "): ");
-                    String depositQuantityString = kb.nextLine();
-                    if (!tryInt(depositQuantityString)) {
-                        System.out.print("Quantidade invalida, tente novamente.\n");
-                    } else {
-                        int depositQuantity = Integer.parseInt(depositQuantityString);
-                        if (depositQuantity <= 0 || !checkDepositLimit(prodName, depositQuantity, products)) {
-                            System.out.print("Quantidade invalida, tente novamente.\n");
-                        } else {
-                            Map<String, Integer> prodDeposit = new HashMap<String, Integer>();
-                            prodDeposit.put(prodName, depositQuantity);
-                            deposit.put(cityName, prodDeposit);
-                            System.out.println("Deseja fazer mais algum deposito? (S/N): ");
-                            option = kb.nextLine();
-                            option = option.toUpperCase();
-                        }
-                    }
-                }
-            } else {
+            if (!cities.contains(cityName)) {
                 System.out.println("Cidade nao encontrada, tente novamente.\n");
+                continue;
             }
+            System.out.println("Digite o nome do produto: ");
+            String prodName = kb.nextLine();
+            for (Product p : products) {
+                if (!p.getName().equalsIgnoreCase(prodName)) {
+                    System.out.println("Produto nao encontrado, tente novamente.\n");
+                    continue;
+                }
+            }
+            System.out.println("Digite a quantidade de deposito (Quantidade Atual: "
+                    + currentProductQuantity(prodName, products) + "): ");
+            String depositQuantityString = kb.nextLine();
+            if (!tryInt(depositQuantityString)) {
+                System.out.print("Quantidade invalida, tente novamente.\n");
+                continue;
+            }
+            int depositQuantity = Integer.parseInt(depositQuantityString);
+            if (depositQuantity <= 0 || !checkDepositLimit(prodName, depositQuantity, products)) {
+                System.out.print("Quantidade invalida, tente novamente.\n");
+                continue;
+            }
+            Map<String, Integer> prodDeposit = new HashMap<String, Integer>();
+            prodDeposit.put(prodName, depositQuantity);
+            deposit.put(cityName, prodDeposit);
+            System.out.println("Deseja fazer mais algum deposito? (S/N): ");
+            option = kb.nextLine();
+            option = option.toUpperCase();
+
         }
 
         return deposit;
