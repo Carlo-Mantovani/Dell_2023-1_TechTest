@@ -112,6 +112,10 @@ public class App {
                 System.out.println("Cidade nao encontrada, tente novamente.\n");
                 continue;
             }
+            if (cityName.equals(cities.get(0))){
+                System.out.println("A cidade de origem nao pode receber deposito, tente novamente.\n");
+                continue;
+            }
             System.out.println("Digite o nome do produto: ");
             String prodName = kb.nextLine();
             for (Product p : products) {
@@ -282,6 +286,8 @@ public class App {
                     // }
                     // }
                     transports.add(new Transport(cities, products, deposit));
+                    //System.out.println(products.size());
+                    System.out.println(transports.get(0).toString(routes, costs));
                     // System.out.println("hi");
 
                     break;

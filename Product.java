@@ -26,6 +26,10 @@ public class Product {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+    public String toString() {
+        
+        return "\n" + name + " - " + quantity + " unidades"; 
+    }
 }
     
 
