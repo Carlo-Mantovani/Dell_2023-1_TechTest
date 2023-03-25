@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,17 +43,17 @@ public class Transport {
         String destination = cities.get(cities.size() - 1);
         System.out.println(products.size());
         Map<String, Integer> bestTransportOptions = getBestTransportOption(products, costs);
-        int totalDistance = calculateTotalDistance(routes);
 
         if (cities.size() <= 2) {
+            int totalDistance = calculateTotalDistance(routes, cities);
             double totalCost = getCostBetweenCities(totalDistance, bestTransportOptions, costs);
             double averageCostPerKm = totalCost / totalDistance;
             double productQuantity = 0;
-            for (Product p: products){
+            for (Product p : products) {
                 productQuantity += p.getQuantity();
             }
             double averageCostPerProduct = totalCost / productQuantity;
-            
+
             return "\nDe " + origin + " para " + destination + " transportando:" + printListProducts(products)
                     + "\nA distância total é de: "
                     + totalDistance + "km"
@@ -62,7 +63,8 @@ public class Transport {
                     + "O custo médio por km rodado é de: R$" + averageCostPerKm + "\n"
                     + "O custo médio por produto transportado é de: R$" + averageCostPerProduct + "\n";
         }
-        return "De [cities=" + cities + ", products=" + products + ", deposit=" + deposit + "]";
+
+        return printWithDeposit(routes, costs, products, deposit);
     }
 
     private String printListProducts(List<Product> products) {
@@ -74,7 +76,7 @@ public class Transport {
         return list;
     }
 
-    private int calculateTotalDistance(Map<String, Map<String, Integer>> routes) {
+    private int calculateTotalDistance(Map<String, Map<String, Integer>> routes, List<String> cities) {
         int totalDistance = 0;
         for (int i = 0; i < cities.size(); i++) {
             if (i == cities.size() - 1) {
@@ -145,4 +147,102 @@ public class Transport {
 
     }
 
+    private String printWithDeposit(Map<String, Map<String, Integer>> routes, Map<Integer, Double> costs,
+            List<Product> products, Map<String, Map<String, Integer>> deposit) {
+        String origin = cities.get(0);
+        String destination = cities.get(cities.size() - 1);
+        Map<String, Integer> bestTransportOptions = getBestTransportOption(products, costs);
+        List<SubRoute> subRoutes = new LinkedList<SubRoute>();
+        int totalDistance = 0;
+        double totalCost = 0;
+        for (int i = 0; i < cities.size() - 1; i++) {
+            List<String> auxCities = new LinkedList<String>();
+            auxCities.add(cities.get(i));
+            auxCities.add(cities.get(i + 1));
+            int subRouteDistance = calculateTotalDistance(routes, auxCities);
+            totalDistance += subRouteDistance;
+            subRoutes.add(new SubRoute(cities.get(i), cities.get(i + 1), subRouteDistance));
+        }
+        int productQuantity = 0;
+        for (Product p : products) {
+            productQuantity += p.getQuantity();
+        }
+
+        String list = "";
+        for (int i = 0; i < products.size(); i++) {
+            list += products.get(i).toString();
+        }
+
+        String result = "\nDe " + origin + " para " + destination + " transportando:" + list
+                + "\nA distância total é de: "
+                + totalDistance + "km";
+
+        int subRoutesIndex = 0;
+        while (cities.size() > 2) {
+
+            list = "";
+            for (int j = 0; j < products.size(); j++) {
+                list += products.get(j).toString();
+            }
+
+            String subRouteOrigin = subRoutes.get(subRoutesIndex).getOrigin();
+            String subRouteDestination = subRoutes.get(subRoutesIndex).getDestination();
+            int subRouteDistance = subRoutes.get(subRoutesIndex).getDistance();
+
+            result += "\nDe " + subRouteOrigin + " para " + subRouteDestination + " transportando:" + list
+                    + "\nA distância é de: "
+                    + subRouteDistance + "km";
+            bestTransportOptions = getBestTransportOption(products, costs);
+            if (deposit.containsKey(subRouteDestination)) {
+                for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
+                    if (entry.getKey().equals(subRouteDestination)) {
+                        result += "\nNa cidade de " + subRouteDestination + " o transporte ira fazer deposito de:\n";
+                        for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
+                            for (Product p : products) {
+                                if (p.getName().equals(entry2.getKey())) {
+                                    p.setQuantity(p.getQuantity() + entry2.getValue());
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            double subRouteCost = getCostBetweenCities(subRouteDistance, bestTransportOptions, costs);
+            totalCost += subRouteCost;
+            result += "Os transportes a serem utilizados para resultar no menor custo de transporte sao:\n "
+                    + bestTransportOptions + "\n"
+                    + "O custo total do transporte nesse trecho é de: R$" + subRouteCost;
+            cities.remove(1);
+        }
+
+        double averageCostPerKm = totalCost / totalDistance;
+        double averageCostPerProduct = totalCost / productQuantity;
+        result += "\nO custo total do transporte é de: R$" + totalCost
+                + "\nO custo médio por km é de: R$" + averageCostPerKm
+                + "\nO custo médio por produto é de: R$" + averageCostPerProduct;
+
+        //String bestTransportOption = "";
+        //for (Map.Entry<String, Integer> entry : bestTransportOptions.entrySet()) {
+        //    bestTransportOption += entry.getValue() + " caminhao(s) do tipo " + entry.getKey() + "\n";
+        //}
+        //String listDeposits = "";
+        //for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
+        //    listDeposits += "Na cidade de " + entry.getKey() + " o transporte ira fazer deposito de:\n";
+        //    for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
+        //        listDeposits += entry2.getValue() + " " + entry2.getKey() + "\n";
+        //    }
+        //}
+        //return "\nDe " + origin + " para " + destination + " transportando:" + list
+        //        + "\nA distância total é de: "
+        //        + totalDistance + "km"
+        //        + " e os transportes a serem utilizados para resultar no menor custo de transporte sao:\n"
+        //        + bestTransportOption + "\n"
+        //        + "O custo total do transporte é de: R$" + totalCost + "\n"
+        //        + "O custo médio por km rodado é de: R$" + averageCostPerKm + "\n"
+        //        + "O custo médio por produto transportado é de: R$" + averageCostPerProduct + "\n"
+        //        + listDeposits;
+        return result;
+
+    }
 }
