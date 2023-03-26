@@ -11,8 +11,6 @@ public class App {
     private static List<String> listCities(Map<String, Map<String, Integer>> routes) {
         List<String> cities = new LinkedList<String>();
         String option = "";
-        // Scanner city = new Scanner(System.in);
-        // Scanner opt2 = new Scanner(System.in);
         while (!option.equals("N")) {
             System.out.print("Digite o nome da cidade a ser cadastrada no trajeto: ");
             String cityName = kb.nextLine();
@@ -25,14 +23,14 @@ public class App {
                 System.out.print("Cidade ja cadastrada, tente novamente.\n");
                 continue;
             }
-            
+
             cities.add(cityName);
             if (cities.size() <= 1) {
                 System.out.print("Cidade adicionada com sucesso, agora adicione mais uma cidade.\n");
                 continue;
             }
             System.out.print("Cidade adicionada com sucesso.\n");
-            
+
             System.out.print("Desejas adicionar outra cidade? (S/N): ");
             option = kb.nextLine();
             option = option.toUpperCase();
@@ -45,7 +43,6 @@ public class App {
                 }
                 continue;
             }
-        
 
         }
         return cities;
@@ -112,6 +109,7 @@ public class App {
         }
         return false;
     }
+
     private static boolean tryDouble(String str) {
         try {
             Double.parseDouble(str);
@@ -129,7 +127,7 @@ public class App {
             return false;
         }
     }
-    
+
     private static String displayRoute(List<String> cities) {
         String result = "";
         for (int i = 0; i < cities.size(); i++) {
@@ -144,6 +142,12 @@ public class App {
     // determina quais depositos serao feitos em quais cidades
     private static Map<String, Map<String, Integer>> deposit(List<String> cities, List<Product> products) {
         Map<String, Map<String, Integer>> deposit = new HashMap<String, Map<String, Integer>>();
+        List<Product> auxProducts = new LinkedList<>();
+        for (Product p : products) {
+
+            auxProducts.add(new Product(p));
+        }
+
         System.out.println("Sera feito algum deposito em alguma cidade? (S/N): ");
         String option = kb.nextLine();
         option = option.toUpperCase();
@@ -158,24 +162,33 @@ public class App {
                 System.out.println("Cidade nao encontrada, tente novamente.\n");
                 continue;
             }
-            if (cityName.equals(cities.get(0))){
+            if (cityName.equals(cities.get(0))) {
                 System.out.println("A cidade de origem nao pode receber deposito, tente novamente.\n");
                 continue;
             }
-            if (cityName.equals(cities.get(cities.size() - 1))){
-                System.out.println("A cidade de destino ja recebera o deposito dos produtos remanescentes, tente novamente.\n");
+            if (cityName.equals(cities.get(cities.size() - 1))) {
+                System.out.println(
+                        "A cidade de destino ja recebera o deposito dos produtos remanescentes, tente novamente.\n");
                 continue;
             }
             System.out.println("Digite o nome do produto: ");
+            displayProducts(products);
             String prodName = kb.nextLine();
+            boolean prodFound = false;
+
             for (Product p : products) {
-                if (!p.getName().equalsIgnoreCase(prodName)) {
-                    System.out.println("Produto nao encontrado, tente novamente.\n");
+                if (p.getName().equalsIgnoreCase(prodName)) {
+                    prodFound = true;
                     continue;
                 }
+
+            }
+            if (!prodFound) {
+                System.out.println("Produto nao encontrado, tente novamente.\n");
+                continue;
             }
             System.out.println("Digite a quantidade de deposito (Quantidade Atual: "
-                    + currentProductQuantity(prodName, products) + "): ");
+                    + currentProductQuantity(prodName, auxProducts) + "): ");
             String depositQuantityString = kb.nextLine();
             if (!tryInt(depositQuantityString)) {
                 System.out.print("Quantidade invalida, tente novamente.\n");
@@ -186,9 +199,27 @@ public class App {
                 System.out.print("Quantidade invalida, tente novamente.\n");
                 continue;
             }
-            Map<String, Integer> prodDeposit = new HashMap<String, Integer>();
-            prodDeposit.put(prodName, depositQuantity);
-            deposit.put(cityName, prodDeposit);
+
+            if (deposit.containsKey(cityName)) {
+                Map<String, Integer> prodDeposit = deposit.get(cityName);
+                if (prodDeposit.containsKey(prodName)) {
+                    int currentQuantity = prodDeposit.get(prodName);
+                    prodDeposit.put(prodName, currentQuantity + depositQuantity);
+                } else {
+                    prodDeposit.put(prodName, depositQuantity);
+                }
+            } else {
+                Map<String, Integer> prodDeposit = new HashMap<String, Integer>();
+                prodDeposit.put(prodName, depositQuantity);
+                deposit.put(cityName, prodDeposit);
+            }
+
+            for (Product p : auxProducts) {
+                if (p.getName().equalsIgnoreCase(prodName)) {
+                    p.setQuantity(p.getQuantity() - depositQuantity);
+                }
+            }
+
             System.out.println("Desejas fazer mais algum deposito? (S/N): ");
             option = kb.nextLine();
             option = option.toUpperCase();
@@ -229,6 +260,17 @@ public class App {
         return quantity;
     }
 
+    private static void displayProducts(List<Product> products) {
+        System.out.println("Produtos disponiveis: ");
+        for (Product p : products) {
+            System.out.print(p.getName());
+            if (p != products.get(products.size() - 1)) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("\n");
+    }
+
     public static void main(String[] args) {
 
         ReadFile fr = new ReadFile();
@@ -260,7 +302,8 @@ public class App {
             System.out.print("|-----------------------------------------------|\n");
             System.out.print("| Opcao 1 - Consultar Trechos x Modalidade      |\n");
             System.out.print("| Opcao 2 - Cadastrar Rota                      |\n");
-            System.out.print("| Opcao 3 - Sair                                |\n");
+            System.out.print("| Opcao 3 - Consultar Dados Estatisticos        |\n");
+            System.out.print("| Opcao 4 - Sair                                |\n");
             System.out.print("|-----------------------------------------------|\n");
             System.out.print("Selecione uma opcao: ");
 
@@ -326,6 +369,11 @@ public class App {
                     break;
 
                 case "2":
+                    System.out.print("\n");
+                    System.out.print("Digite o nome da empresa que fará o transporte \n");
+                    String company = kb.nextLine();
+                    company.toUpperCase();
+
                     List<String> cities = listCities(routes);
                     // for (String city : cities) {
                     // System.out.println(city);
@@ -336,12 +384,11 @@ public class App {
                     // System.out.println(product.getWeight());
                     // System.out.println(product.getQuantity());
                     // }
-                    Map <String , Map<String, Integer>> deposit;
-                    if (cities.size()>2){
+                    Map<String, Map<String, Integer>> deposit;
+                    if (cities.size() > 2) {
                         deposit = deposit(cities, products);
 
-                    }
-                    else {
+                    } else {
                         deposit = null;
                     }
                     // for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
@@ -351,14 +398,29 @@ public class App {
                     // entry2.getValue());
                     // }
                     // }
-                    transports.add(new Transport(cities, products, deposit));
-                    //System.out.println(products.size());
-                    System.out.println(transports.get(0).toString(routes, costs));
+                    Transport newTransport = new Transport(cities, products, deposit, company);
+                    transports.add(newTransport);
+                    // System.out.println(products.size());
+                    System.out.println(newTransport.toString(routes, costs));
                     // System.out.println("hi");
 
                     break;
 
                 case "3":
+
+                    System.out.print("\n");
+
+                    if (transports.isEmpty()) {
+                        System.out.print("Nenhum transporte cadastrado\n");
+                        break;
+                    }
+                    for (Transport transport : transports) {
+                        System.out.println(transport.toString(routes, costs));
+                    }
+
+                    break;
+
+                case "4":
                     System.exit(0);
                     kb.close();
                 default:
