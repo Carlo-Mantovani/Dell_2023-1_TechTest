@@ -318,6 +318,13 @@ public class App {
         }
         System.out.println("\n");
     }
+    private static String printCityList(Map<String,Map<String,Integer>> routes) {
+        String cityList = "";
+        for (String city : routes.keySet()) {
+            cityList += city + ", ";
+        }
+        return cityList;
+    }
 
     public static void main(String[] args) { // main
 
@@ -358,6 +365,7 @@ public class App {
                 // opcao 1 - Consultar Trechos x Modalidade
                 case "1":
                     System.out.print("\n");
+                    System.out.println("Cidades disponiveis: " + printCityList(routes));
                     System.out.print("Digite a cidade de origem: \n");// leitura da cidade de origem
 
                     String origin = kb.nextLine();
@@ -429,6 +437,8 @@ public class App {
                     System.out.print("Digite o nome da empresa que fará o transporte \n");// leitura do nome da empresa
                     String company = kb.nextLine();
                     company.toUpperCase();
+
+                    System.out.println("Cidades disponiveis: " + printCityList(routes));
 
                     List<String> cities = listCities(routes);// cadastro de cidades a serem percorridas
 
