@@ -447,13 +447,13 @@ public class Transport {
                                                                        // veiculos e pela distancia do trecho
             if (entry.getKey().equals("Pequeno Porte")) {
                 cost += entry.getValue() * costs.get(1) * distance;
-                this.cost1 = entry.getValue() * costs.get(1) * distance;
+                this.cost1 += entry.getValue() * costs.get(1) * distance;
             } else if (entry.getKey().equals("Medio Porte")) {
                 cost += entry.getValue() * costs.get(2) * distance;
-                this.cost2 = entry.getValue() * costs.get(2) * distance;
+                this.cost2 += entry.getValue() * costs.get(2) * distance;
             } else if (entry.getKey().equals("Grande Porte")) {
                 cost += entry.getValue() * costs.get(3) * distance;
-                this.cost3 = entry.getValue() * costs.get(3) * distance;
+                this.cost3 += entry.getValue() * costs.get(3) * distance;
             }
 
         }
