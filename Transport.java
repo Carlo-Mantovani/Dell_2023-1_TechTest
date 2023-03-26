@@ -173,7 +173,7 @@ public class Transport {
                 + "\nA distância é de: "
                 + totalDistance + "km.\n";
 
-        //imprime o trajeto do transporte
+        // imprime o trajeto do transporte
         result += "\nTrajeto:";
         for (String c : cityList) {
             if (c.equals(cityList.get(cities.size() - 1))) {
