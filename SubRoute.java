@@ -1,15 +1,18 @@
 public class SubRoute {
 
-    private String origin;
-    private String destination;
-    private int distance;
+    private String origin;//origem do trecho
+    private String destination;//destino do trecho
+    private int distance;//distancia do trecho
 
+    //construtor
     public SubRoute(String origin, String destination, int distance) {
         this.origin = origin;
         this.destination = destination;
         this.distance = distance;
     }
 
+
+    //getters e setters
     public String getOrigin() {
         return origin;
     }

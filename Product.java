@@ -1,20 +1,23 @@
 public class Product {
-    private String name;
-    private double weight;
-    private int quantity;
+    private String name;//nome do produto
+    private double weight;//peso do produto
+    private int quantity;//quantidade de produtos
 
+    //construtor
     public Product(String name, double weight, int quantity) {
         this.name = name;
         this.weight = weight;
         this.quantity = quantity;
     }
 
+    //construtor de cópia
     public Product(Product product) {
         this.name = product.name;
         this.weight = product.weight;
         this.quantity = product.quantity;
     }
 
+    //getters e setters
     public String getName() {
         return name;
     }
@@ -39,6 +42,7 @@ public class Product {
         this.weight = weight;
     }
 
+    //método para imprimir os dados do produto
     public String toString() {
 
         return "\n" + name + " - " + quantity + " unidades";
