@@ -54,14 +54,17 @@ public class Transport {
             }
             double averageCostPerProduct = totalCost / productQuantity;
 
+            String totalCostString =String.format("%.2f", totalCost);
+            String averageCostPerKmString = String.format("%.2f", averageCostPerKm);
+            String averageCostPerProductString = String.format("%.2f", averageCostPerProduct);
             return "\nDe " + origin + " para " + destination + " transportando:" + printListProducts(products)
                     + "\nA distância total é de: "
                     + totalDistance + "km"
                     + " e os transportes a serem utilizados para resultar no menor custo de transporte sao:\n"
                     + printBestTransportOption(bestTransportOptions) + "\n"
-                    + "O custo total do transporte é de: R$" + totalCost + "\n"
-                    + "O custo médio por km rodado é de: R$" + averageCostPerKm + "\n"
-                    + "O custo médio por produto transportado é de: R$" + averageCostPerProduct + "\n";
+                    + "O custo total do transporte é de: R$" + totalCostString + "\n"
+                    + "O custo médio por km é de: R$" + averageCostPerKmString + "\n"
+                    + "O custo médio por produto transportado é de: R$" + averageCostPerProductString + "\n";
         }
 
         return printWithDeposit(routes, costs, products, deposit);
@@ -178,29 +181,30 @@ public class Transport {
                 + totalDistance + "km";
 
         int subRoutesIndex = 0;
-        while (cities.size() > 2) {
+        while (cities.size() >= 2) {
 
             list = "";
             for (int j = 0; j < products.size(); j++) {
                 list += products.get(j).toString();
             }
 
-            String subRouteOrigin = subRoutes.get(subRoutesIndex).getOrigin();
-            String subRouteDestination = subRoutes.get(subRoutesIndex).getDestination();
-            int subRouteDistance = subRoutes.get(subRoutesIndex).getDistance();
+            SubRoute subRoute = subRoutes.get(subRoutesIndex);
+            String subRouteOrigin = subRoute.getOrigin();
+            String subRouteDestination = subRoute.getDestination();
+            int subRouteDistance = subRoute.getDistance();
 
             result += "\nDe " + subRouteOrigin + " para " + subRouteDestination + " transportando:" + list
                     + "\nA distância é de: "
-                    + subRouteDistance + "km";
+                    + subRouteDistance + "km. ";
             bestTransportOptions = getBestTransportOption(products, costs);
             if (deposit.containsKey(subRouteDestination)) {
                 for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
-                    if (entry.getKey().equals(subRouteDestination)) {
+                    if (entry.getKey().equalsIgnoreCase(subRouteDestination)) {
                         result += "\nNa cidade de " + subRouteDestination + " o transporte ira fazer deposito de:\n";
                         for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
                             for (Product p : products) {
-                                if (p.getName().equals(entry2.getKey())) {
-                                    p.setQuantity(p.getQuantity() + entry2.getValue());
+                                if (p.getName().equalsIgnoreCase(entry2.getKey())) {
+                                    p.setQuantity(p.getQuantity() - entry2.getValue());
                                 }
                             }
                         }
@@ -210,39 +214,26 @@ public class Transport {
             }
             double subRouteCost = getCostBetweenCities(subRouteDistance, bestTransportOptions, costs);
             totalCost += subRouteCost;
-            result += "Os transportes a serem utilizados para resultar no menor custo de transporte sao:\n "
+            String subRouteCostString = String.format("%.2f",subRouteCost);
+            result += "\nOs transportes a serem utilizados para resultar no menor custo de transporte sao:\n "
                     + bestTransportOptions + "\n"
-                    + "O custo total do transporte nesse trecho é de: R$" + subRouteCost;
+                    + "O custo total do transporte nesse trecho é de: R$" + subRouteCostString;
+            subRoutesIndex++;
             cities.remove(1);
         }
 
         double averageCostPerKm = totalCost / totalDistance;
         double averageCostPerProduct = totalCost / productQuantity;
-        result += "\nO custo total do transporte é de: R$" + totalCost
-                + "\nO custo médio por km é de: R$" + averageCostPerKm
-                + "\nO custo médio por produto é de: R$" + averageCostPerProduct;
+        String averageCostPerKmString = String.format("%.2f", averageCostPerKm);
+        String averageCostPerProductString = String.format("%.2f", averageCostPerProduct);
+        String totalCostString = String.format("%.2f", totalCost);
+        result += "\nO custo total do transporte é de: R$" + totalCostString
+                + "\nO custo médio por km é de: R$" + averageCostPerKmString
+                + "\nO custo médio por produto é de: R$" + averageCostPerProductString;
 
-        //String bestTransportOption = "";
-        //for (Map.Entry<String, Integer> entry : bestTransportOptions.entrySet()) {
-        //    bestTransportOption += entry.getValue() + " caminhao(s) do tipo " + entry.getKey() + "\n";
-        //}
-        //String listDeposits = "";
-        //for (Map.Entry<String, Map<String, Integer>> entry : deposit.entrySet()) {
-        //    listDeposits += "Na cidade de " + entry.getKey() + " o transporte ira fazer deposito de:\n";
-        //    for (Map.Entry<String, Integer> entry2 : entry.getValue().entrySet()) {
-        //        listDeposits += entry2.getValue() + " " + entry2.getKey() + "\n";
-        //    }
-        //}
-        //return "\nDe " + origin + " para " + destination + " transportando:" + list
-        //        + "\nA distância total é de: "
-        //        + totalDistance + "km"
-        //        + " e os transportes a serem utilizados para resultar no menor custo de transporte sao:\n"
-        //        + bestTransportOption + "\n"
-        //        + "O custo total do transporte é de: R$" + totalCost + "\n"
-        //        + "O custo médio por km rodado é de: R$" + averageCostPerKm + "\n"
-        //        + "O custo médio por produto transportado é de: R$" + averageCostPerProduct + "\n"
-        //        + listDeposits;
+       
         return result;
 
     }
+    
 }
