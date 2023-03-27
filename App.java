@@ -199,8 +199,8 @@ public class App {
                         "A cidade de destino ja recebera o deposito dos produtos remanescentes, tente novamente.\n");
                 continue;
             }
-            System.out.println("Digite o nome do produto: ");// pede para o usuario digitar o nome do produto que sera
-                                                             // depositado
+            System.out.println("Digite o nome do produto para deposito: ");// pede para o usuario digitar o nome do
+                                                                           // produto que sera depositado
             displayProducts(products);
             String prodName = kb.nextLine();
             boolean prodFound = false;
@@ -318,7 +318,8 @@ public class App {
         }
         System.out.println("\n");
     }
-    private static String printCityList(Map<String,Map<String,Integer>> routes) {
+
+    private static String printCityList(Map<String, Map<String, Integer>> routes) {
         String cityList = "";
         for (String city : routes.keySet()) {
             cityList += city + ", ";
@@ -472,8 +473,12 @@ public class App {
                         System.out.print("Nenhum transporte cadastrado\n");
                         break;
                     }
+                    int transportIndex = 1;// variavel que armazena o indice do transporte que está sendo
+                                           // consultado
                     for (Transport transport : transports) {// imprime os dados de todos os transportes cadastrados
+                        System.out.print("Transporte " + transportIndex + "\n");
                         System.out.println(transport.toString(routes, costs));
+                        transportIndex++;
                     }
 
                     break;

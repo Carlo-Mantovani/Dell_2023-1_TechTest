@@ -299,7 +299,8 @@ public class Transport {
             if (i == cities.size() - 1) {
                 break;
             }
-            totalDistance += routes.get(cities.get(i)).get(cities.get(i + 1));
+            totalDistance += routes.get(cities.get(i)).get(cities.get(i + 1));// soma a distancia entre a cidade atual e
+                                                                             // a proxima cidade
         }
         return totalDistance;
     }
@@ -420,13 +421,7 @@ public class Transport {
             quantities.set(0, quantities.get(0) - (small_medium + 1));
             quantities.set(1, quantities.get(1) + 1);
         }
-        // verifica se é benefico converter veiculos de medio porte em veiculos de
-        // grande porte
-        if (quantities.get(1) > medium_big) {
-            quantities.set(1, quantities.get(1) - (medium_big + 1));
-            quantities.set(2, quantities.get(2) + 1);
-            quantities.set(0, quantities.get(0) + 2);
-        }
+    
         // verifica se é benefico converter veiculos de pequeno porte, somado com
         // veiculos de medio porte, em veiculos de grande porte
         if (quantities.get(0) == smallMedium_big && quantities.get(1) == medium_big) {
