@@ -300,7 +300,7 @@ public class Transport {
                 break;
             }
             totalDistance += routes.get(cities.get(i)).get(cities.get(i + 1));// soma a distancia entre a cidade atual e
-                                                                             // a proxima cidade
+                                                                              // a proxima cidade
         }
         return totalDistance;
     }
@@ -421,7 +421,7 @@ public class Transport {
             quantities.set(0, quantities.get(0) - (small_medium + 1));
             quantities.set(1, quantities.get(1) + 1);
         }
-    
+
         // verifica se é benefico converter veiculos de pequeno porte, somado com
         // veiculos de medio porte, em veiculos de grande porte
         if (quantities.get(0) == smallMedium_big && quantities.get(1) == medium_big) {
