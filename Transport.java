@@ -418,13 +418,15 @@ public class Transport {
         // verifica se é benefico converter veiculos de pequeno porte em veiculos de
         // medio porte
         if (quantities.get(0) > small_medium) {
-            if (quantities.get(0) == small_medium + 1){//se a quantidade de veiculos de pequeno porte excede o limite em 1, converte o limite + 1 veiculo para medio porte
-            quantities.set(0, quantities.get(0) - (small_medium + 1));
-            }else{//caso exceda o limite em mais de 1, converte o limite + 2 veiculos para medio porte
+            if (quantities.get(0) == small_medium + 1) {// se a quantidade de veiculos de pequeno porte excede o limite
+                                                        // em 1, converte o limite + 1 veiculo para medio porte
+                quantities.set(0, quantities.get(0) - (small_medium + 1));
+            } else {// caso exceda o limite em mais de 1, converte o limite + 2 veiculos para medio
+                    // porte
                 quantities.set(0, quantities.get(0) - (small_medium + 2));
             }
 
-            quantities.set(1, quantities.get(1) + 1);
+            quantities.set(1, quantities.get(1) + 1);// incrementa a quantidade de veiculos de medio porte
         }
 
         // verifica se é benefico converter veiculos de pequeno porte, somado com
